@@ -1,5 +1,6 @@
 import React from "react";
 import ReactDom from "react-dom/client";
+import "./index.css";
 
 const pizzaData = [
   {
@@ -48,21 +49,96 @@ const pizzaData = [
 
 function App() {
   return (
-    <div>
-      <h1>Hello React!</h1>
-      <img src="pizzas/spinaci.jpg" alt="Pizza Spinaci" />
-      <Pizza />
+    <div className="container">
+      <Header />
+      <Menu />
+      <Footer />
     </div>
   );
 }
 
-function Pizza() {
+function Header() {
+  const style = {};
+
   return (
-    <div>
-      <h2>Pizza Spinaci</h2>
-      <p>Tomato, mozarella, spinach, and ricotta cheese</p>
-    </div>
+    <header className="header">
+      <h1 style={style}>React Pizzeria</h1>
+    </header>
   );
+}
+
+function Menu() {
+  const pizzas = pizzaData;
+  const numPizzas = pizzas.length;
+
+  return (
+    <main className="menu">
+      <h2>Today's Menu:</h2>
+      {numPizzas > 0 ? (
+        <ul className="pizzas">
+          {pizzaData.map((pizza) => (
+            <Pizza pizzaObj={pizza} key={pizza.name} />
+          ))}
+        </ul>
+      ) : (
+        <p>The Menu is being set up. Please come back later!</p>
+      )}
+      {/* <Pizza
+        name="Pizza Spinachi"
+        ingredient="Tomato, mozarella, spinach, and ricotta cheese"
+        photoName="pizzas/spinaci.jpg"
+        price={10}
+      />
+      <Pizza
+        name="Pizza Funghi"
+        ingredient="Tomato, mushrooms"
+        photoName="pizzas/funghi.jpg"
+        price={12}
+      /> */}
+    </main>
+  );
+}
+
+function Pizza(props) {
+  return (
+    <li className="pizza">
+      <img src={props.pizzaObj.photoName} alt={props.pizzaObj.name} />
+      <h3>{props.pizzaObj.name}</h3>
+      <span>{props.pizzaObj.price}</span>
+      <p>{props.pizzaObj.ingredients}</p>
+    </li>
+  );
+}
+
+function Footer() {
+  const timeNow = new Date().toLocaleTimeString([], {
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+  const hour = timeNow.hour;
+  const openHour = 8;
+  const closeHour = 22;
+  const isOpen = hour >= openHour && hour <= closeHour;
+  // if (hour >= openHour && hour <= closeHour) {
+  //   alert("We're currently open!");
+  // } else {
+  //   alert("Sorry, we're closed.");
+  // }
+
+  return (
+    <footer className="footer">
+      <div>It's {timeNow} ...</div>
+      {isOpen ? (
+        <div className="order">
+          <p>We're Currently open until 8:00 PM !</p>
+          <button className="btn">Order</button>
+        </div>
+      ) : (
+        <p>We're currently closed until 10:00 AM !</p>
+      )}
+    </footer>
+  );
+  // return React.createElement("footer", null, "We're open 24/7!");
 }
 
 // React v18
